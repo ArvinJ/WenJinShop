@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Login</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	
+	<link rel="stylesheet" href="background/css/bootstrap.min.css">
+	<link rel="stylesheet" href="background/css/animate.css">
+	<link rel="stylesheet" href="background/css/signup_style.css">
+	<!-- Bootstrap -->
+	<!-- <script src="background/js/bootstrap.min.js"></script> -->
+	<!-- <script src="background/myjs/jquery-3.3.1.min.js"/> --> 
+	<!-- <script src="background/myjs/signin.js"></script> -->
+	</head>
+	<body class="style-3">
+<script type="text/javascript">
+function myFunction(){
+	document.getElementById("demo").innerHTML="Hello World";
+}
+
+function signin2() {
+	
+	alert("dfdfdfdfdf");
+	
+	var username=document.getElementById("username").innerHTML;
+	var password= document.getElementById("password").innerHTML;
+	
+	//var username= $("#username").val();
+	//var password= $("#password").val();
+	alert("username:"+username+"-password:"+password);
+	
+	$.ajax({
+        type:"POST",
+        dataType: 'json',
+        contentType: "application/json;",
+        url:"/steels/user/login",
+        async:false,
+        data:{
+            "name":username,
+            "pass":password
+        },
+        beforeSend: function () {
+            $("body").append('<div id="pload" style="position:fixed;top:30%;z-index:1200;background:url(background/img/loading.gif) top center no-repeat;width:100%;height:140px;margin:auto auto;"></div>');
+        },
+        complete: function () {
+            $("#pload").remove();
+        },
+        
+        success: function(result){
+        	alert(result);
+        	var jsonObj = eval( '(' + result + ')' ); 
+            if(jsonObj.res=="200"){
+            	alert(jsonObj.msg);
+            	
+            }else{
+            	alert(jsonObj.msg);
+            	// 失败
+            }
+        }
+    })
+	
+	
+
+}
+
+
+</script>
+		<div class="container">
+			
+			<div class="row" >
+				<div class="col-md-4 col-md-push-8">
+
+					<form class="fh5co-form animate-box" data-animate-effect="fadeInRight">
+						<h2>Sign In</h2>
+						<div class="form-group">
+							<label for="username" class="sr-only">Username</label>
+							<input type="text" class="form-control" id="username" placeholder="Username" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">Password</label>
+							<input type="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
+						</div>
+						<div class="form-group">
+							<p>Not registered? <a href="/signup">Sign Up</a> | <a href="/forgotpwd">Forgot Password?</a></p>
+						</div>
+						<div class="form-group">
+						<p>单击按钮触发函数。</p>
+<button onclick="myFunction()">点我</button>
+<p id="demo"></p>
+							<button type="button" onclick="signin2();" class="btn btn-primary">Sign In</button>
+						</div>
+					</form>
+					<!-- END Sign In Form -->
+
+
+				</div>
+			</div>
+			<div class="row" style="padding-top: 60px; clear: both;">
+				<div class="col-md-12 text-center"><p><small>&copy;Y&Z</small></p></div>
+			</div>
+		</div>
+	
+	
+	
+
+
+	</body>
+</html>
+

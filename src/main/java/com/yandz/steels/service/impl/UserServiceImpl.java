@@ -58,4 +58,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.selectAll();
 	}
 
+	@Override
+	public User findByName(String name) {
+
+		return userMapper.findByName(name);
+	}
+
 }

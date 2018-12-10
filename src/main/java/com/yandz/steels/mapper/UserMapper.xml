@@ -55,6 +55,16 @@
 		#{id,jdbcType=INTEGER} and status=1
 	</select>
 
+	<select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select id, name, pass, role_priv_level, role_id, id_card, is_online,
+		is_locked, mobile,
+		email, create_date, update_date, status
+		from t_user
+		where name =
+		#{name,jdbcType=VARCHAR} and status=1
+	</select>
+
+
 
 	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		update t_user set

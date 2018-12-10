@@ -3,6 +3,12 @@ package com.yandz.steels.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yandz.steels.entity.Result;
 import com.yandz.steels.entity.User;
 import com.yandz.steels.service.UserService;
+import com.yandz.steels.utils.MD5;
 
 import ch.qos.logback.classic.Logger;
 
@@ -36,6 +43,36 @@ public class UserController {
 	UserService userService;
 	private Result result = new Result();
 	public Logger logger = (Logger) LoggerFactory.getLogger(getClass());
+
+	/**
+	 * 登录
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
+	public Result login(@RequestBody User u) {
+		
+		System.err.println(u.toString());
+		// 添加用户认证信息
+		Subject subject = SecurityUtils.getSubject();
+		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(u.getName().toString(),
+				u.getPass().toString());
+		// 进行验证，这里可以捕获异常，然后返回对应信息
+		try {
+			subject.login(usernamePasswordToken);
+			result.setRes("200");
+			result.setMsg("登录成功");
+		} catch (UnknownAccountException e) {
+			result.setRes("501");
+			result.setMsg("用户名错误");
+		} catch (IncorrectCredentialsException e) {
+			result.setRes("502");
+			result.setMsg("密码错误");
+		} catch (AuthenticationException e) {
+			result.setRes("500");
+			result.setMsg("登录失败");
+		}
+		return result;
+	}
 
 	/**
 	 * 根据id查询用户
@@ -68,11 +105,16 @@ public class UserController {
 	}
 
 	/**
-	 * 以json对象字符串做上传参数提交 添加记录
+	 * 注册，md5加密，以json对象字符串做上传参数提交 添加记录
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Result add(@RequestBody User user) {
+		try {
+			user.setPass(MD5.md5(user.getName(), user.getPass()));
+		} catch (Exception e) {
+			logger.error("密码加密有误！");
+		}
 		result.setData(user);
 		// TODO 校验数据是否已经存在当前提交的对应关系
 		user.setCreateDate(new Date());
@@ -129,8 +171,7 @@ public class UserController {
 
 		return result;
 	}
-	
-	
+
 	/**
 	 * 为用户添加角色
 	 */
@@ -154,6 +195,5 @@ public class UserController {
 
 		return result;
 	}
-	
 
 }

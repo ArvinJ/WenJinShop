@@ -11,11 +11,22 @@ public class GetViewController {
 		// 登录界面
 		return "background/login";
 	}
+	@RequestMapping("/signin")
+	public String signin() {
+		// 登录界面
+		return "background/signin";
+	}
 
 	@RequestMapping("/")
 	public String index() {
 		// 首页
 		return "background/index";
+	}
+
+	@RequestMapping("/signup")
+	public String register() {
+		// 注册
+		return "background/signup";
 	}
 
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- context 元素用于指定生成一组对象的环境。 targetRuntime：MyBatis3Simple 只生成提供简单增删改查的代码 -->
+	<context id="DB2Tables" targetRuntime="MyBatis3Simple">
+		<!-- 配置在逆向生成时不需要有他们默认的注释 -->
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- 配置数据库连接信息 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/steels?serverTimezone=GMT%2B8" userId="root"
+			password="123456">
+		</jdbcConnection>
+ <!-- 默认 false，把 JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true 时把 JDBC DECIMAL 和   
+            NUMERIC 类型解析为 java.math.BigDecimal -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- 指定javabean生成的位置 targetPackage:在哪个包下生成 targetProject:在哪个工程下 -->
+		<javaModelGenerator targetPackage="com.yandz.steels.entity"
+			targetProject=".\src\main\java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- 指定sql映射文件生成的位置 -->
+		<sqlMapGenerator targetPackage="com.yandz.steels.mapper"
+		targetProject=".\src\main\java">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<!-- 指定到接口生成的位置 ，mapper接口 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.yandz.steels.dao" targetProject=".\src\main\java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- 指定每个表的生成策略 -->
+		<!-- <table tableName="t_operation" domainObjectName="Operation"></table>
+		 -->
+		<!-- <table tableName="t_role" domainObjectName="Role"></table> -->
+		<!-- <table tableName="t_module" domainObjectName="Module"></table> -->
+		<!-- <table tableName="t_permission" domainObjectName="Permission"></table> -->
+		<!-- <table tableName="t_user" domainObjectName="User"></table> -->
+		
+	</context>
+</generatorConfiguration>

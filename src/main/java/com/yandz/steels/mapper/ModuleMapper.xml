@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yandz.steels.dao.ModuleMapper">
+  <resultMap id="BaseResultMap" type="com.yandz.steels.entity.Module">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="module_parent" jdbcType="INTEGER" property="moduleParent" />
+    <result column="module_hierarchy" jdbcType="VARCHAR" property="moduleHierarchy" />
+    <result column="module_level" jdbcType="INTEGER" property="moduleLevel" />
+    <result column="icon_name" jdbcType="VARCHAR" property="iconName" />
+    <result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  
+  
+   <sql id="module">
+        SELECT * FROM t_module 
+    </sql>
+    
+    <sql id="module_Column_List" >
+        id, module_name, module_parent,module_level,module_hierarchy, module_url,create_date,update_date,status
+    </sql>
+    
+  <insert id="insert" parameterType="com.yandz.steels.entity.Module">
+    insert into t_module (module_name, module_parent, 
+      module_hierarchy, module_level, icon_name, 
+      module_url, create_date, update_date, 
+      status)
+    values ( #{moduleName,jdbcType=VARCHAR}, #{moduleParent,jdbcType=INTEGER}, 
+      #{moduleHierarchy,jdbcType=VARCHAR}, #{moduleLevel,jdbcType=INTEGER}, #{iconName,jdbcType=VARCHAR}, 
+      #{moduleUrl,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, module_name, module_parent, module_hierarchy, module_level, icon_name, 
+    module_url, create_date, update_date, status
+    from t_module where status=1
+  </select>
+  
+   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="module_Column_List" />
+        from t_module
+        where id = #{id,jdbcType=INTEGER} and status=1
+    </select>
+     <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        update t_module set status = 0 where id = #{id,jdbcType=INTEGER}
+    </update> 
+    <!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_module
+        where id = #{id,jdbcType=INTEGER}
+    </delete> -->
+    
+    
+   <update id="updateByPrimaryKey" parameterType="com.yandz.steels.entity.Module" >
+        update t_module
+        <set >
+            <if test="moduleName != null" >
+                module_name = #{moduleName,jdbcType=VARCHAR},
+            </if>
+            <if test="moduleHierarchy != null" >
+                module_hierarchy = #{moduleHierarchy,jdbcType=VARCHAR},
+            </if>
+             <if test="iconName != null" >
+                icon_name = #{iconName,jdbcType=VARCHAR},
+            </if>
+             <if test="moduleUrl != null" >
+                module_url = #{moduleUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR}
+            </if>
+            
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+   <!--  
+    <update id="updateByPrimaryKey" parameterType="com.yandz.steels.entity.Module" >
+        update t_module
+        set user_name = #{userName,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        age = #{age,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update> -->
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yandz.steels.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="com.yandz.steels.entity.User">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="pass" jdbcType="VARCHAR" property="pass" />
+		<result column="role_priv_level" jdbcType="INTEGER" property="rolePrivLevel" />
+		<result column="role_id" jdbcType="INTEGER" property="roleId" />
+		<result column="id_card" jdbcType="VARCHAR" property="idCard" />
+		<result column="is_online" jdbcType="INTEGER" property="isOnline" />
+		<result column="is_locked" jdbcType="INTEGER" property="isLocked" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+	</resultMap>
+	<insert id="insert" parameterType="com.yandz.steels.entity.User">
+		insert into t_user (id, name,
+		pass,
+		role_priv_level, role_id, id_card,
+		is_online, is_locked, mobile,
+		email, create_date, update_date,
+		status)
+		values (#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{pass,jdbcType=VARCHAR},
+		#{rolePrivLevel,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER},
+		#{idCard,jdbcType=VARCHAR},
+		#{isOnline,jdbcType=INTEGER},
+		#{isLocked,jdbcType=INTEGER},
+		#{mobile,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+		#{updateDate,jdbcType=TIMESTAMP},
+		#{status,jdbcType=INTEGER})
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, name, pass,
+		role_priv_level, role_id, id_card, is_online,
+		is_locked, mobile,
+		email,
+		create_date, update_date, status
+		from t_user where status=1
+	</select>
+
+
+
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select id, name, pass, role_priv_level, role_id, id_card, is_online,
+		is_locked, mobile,
+		email, create_date, update_date, status
+		from t_user
+		where id =
+		#{id,jdbcType=INTEGER} and status=1
+	</select>
+
+
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update t_user set
+		status = 0 where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.yandz.steels.entity.User">
+		update t_user
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="pass != null">
+				pass = #{pass,jdbcType=VARCHAR},
+			</if>
+			<if test="rolePrivLevel != null">
+				role_priv_level = #{rolePrivLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="idCard != null">
+				id_card = #{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="isOnline != null">
+				is_online = #{isOnline,jdbcType=VARCHAR},
+			</if>
+
+			<if test="isLocked != null">
+				is_locked = #{isLocked,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR}
+			</if>
+
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

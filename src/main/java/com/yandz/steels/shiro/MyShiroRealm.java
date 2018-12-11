@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yandz.steels.entity.User;
 import com.yandz.steels.service.UserService;
+import com.yandz.steels.utils.MD5;
 
 //实现AuthorizingRealm接口用户用户认证
 public class MyShiroRealm extends AuthorizingRealm {
@@ -50,7 +51,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 		}
 		// 获取用户信息
 		String name = authenticationToken.getPrincipal().toString();
+		System.out.println("name:"+name);
 		User user = userService.findByName(name);
+		
+		
 		if (user == null) {
 			// 这里返回后会报出对应异常
 			return null;

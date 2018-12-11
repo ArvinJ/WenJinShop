@@ -29,4 +29,9 @@ public class GetViewController {
 		return "background/signup";
 	}
 
+	@RequestMapping("/test")
+	public String test() {
+		// 注册
+		return "background/test";
+	}
 }

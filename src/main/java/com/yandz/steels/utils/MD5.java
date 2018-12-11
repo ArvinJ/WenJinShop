@@ -23,7 +23,7 @@ public class MD5 {
 		
 		String encodeStr = DigestUtils.md5DigestAsHex((text + key).getBytes(Charset.forName("UTF-8")));
 		encodeStr =	DigestUtils.md5DigestAsHex(encodeStr.getBytes());
-		System.out.println("MD5加密后的字符串为:encodeStr=" + encodeStr);
+		//System.out.println("MD5加密后的字符串为:encodeStr=" + encodeStr);
 		return encodeStr;
 	}
 
@@ -43,7 +43,7 @@ public class MD5 {
 		// 根据传入的密钥进行验证
 		String md5Text = md5(text, key);
 		if (md5Text.equalsIgnoreCase(md5)) {
-			System.out.println("MD5验证通过");
+			//System.out.println("MD5验证通过");
 			return true;
 		}
 
@@ -54,8 +54,8 @@ public class MD5 {
 	public static void main(String[] args) {
 		
 		try {
-		 System.err.println(md5("wenjin","123"));
-		 verify("wenjin","123","93d90586d9c97a5424181416379bd119");
+		 //System.err.println(md5("wenjin","123"));
+		 verify("zwj","123456","e579e416af0cdf963586f4f8b4bcf142");
 		 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

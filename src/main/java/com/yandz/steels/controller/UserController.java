@@ -50,8 +50,13 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public Result login(@RequestBody User u) {
-		
-		System.err.println(u.toString());
+
+		try {
+			u.setPass(MD5.md5(u.getName(), u.getPass()));
+		} catch (Exception e1) {
+			System.err.println("密码加密重组错误！");
+			e1.printStackTrace();
+		}
 		// 添加用户认证信息
 		Subject subject = SecurityUtils.getSubject();
 		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(u.getName().toString(),
@@ -71,6 +76,8 @@ public class UserController {
 			result.setRes("500");
 			result.setMsg("登录失败");
 		}
+
+
 		return result;
 	}
 
@@ -110,22 +117,34 @@ public class UserController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Result add(@RequestBody User user) {
-		try {
-			user.setPass(MD5.md5(user.getName(), user.getPass()));
-		} catch (Exception e) {
-			logger.error("密码加密有误！");
-		}
-		result.setData(user);
-		// TODO 校验数据是否已经存在当前提交的对应关系
-		user.setCreateDate(new Date());
-		boolean temp = userService.addObject(user);
-		logger.info("执行添加记录结果：" + temp);
-		if (temp) {
-			result.setRes("200");
+		user.setStatus(1);
+		User u = userService.findByName(user.getName());
+		if (u != null) {
+			// 已经存在，不允许再次创建
+			result.setRes("503");
+			result.setMsg("用户已经存在，不允许再次创建");
 		} else {
-			result.setRes("500");
+			try {
+				user.setPass(MD5.md5(user.getName(), user.getPass()));
+				result.setData(user);
+				user.setCreateDate(new Date());
+				boolean temp = userService.addObject(user);
+				logger.info("执行添加记录结果：" + temp);
+				if (temp) {
+					result.setRes("200");
+				} else {
+					result.setRes("500");
+				}
+				result.setMsg("添加操作执行状态：" + temp);
+
+			} catch (Exception e) {
+				logger.error("密码加密有误！");
+				result.setRes("504");
+				result.setMsg("用户密码加密有误");
+			}
+
 		}
-		result.setMsg("执行添加记录结果：" + temp);
+
 		return result;
 	}
 

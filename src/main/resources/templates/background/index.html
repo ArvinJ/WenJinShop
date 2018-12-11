@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -25,8 +25,13 @@
 <!-- Core stylesheets -->
 <link rel="stylesheet" href="background/css/ui-elements/card.css">
 <link rel="stylesheet" href="background/css/style.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
-
+<script type="text/javascript">
+	function logout() {
+		window.location.href = "http://localhost:8283/steels/logout";
+	}
+</script>
 <body>
 
 	<!--====================================================
@@ -48,11 +53,11 @@
 					<div class="navbar-header">
 						<a href="index.html" class="navbar-brand">
 							<div class="brand-text brand-big hidden-lg-down">
-								<img src="background/img/logo-white.png" alt="Logo"
+								<img style="background: yellow" src="background/img/logow.png" alt="Logo"
 									class="img-fluid">
 							</div>
 							<div class="brand-text brand-small">
-								<img src="background/img/logo-icon.png" alt="Logo"
+								<img  style="background: red" src="background/img/icon.png" alt="Logo"
 									class="img-fluid">
 							</div>
 						</a> <a id="toggle-btn" href="#" class="menu-btn active"> <span></span>
@@ -76,7 +81,7 @@
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
 							class="fa fa-bell-o"></i><span class="noti-numb-bg"></span><span
 							class="badge">12</span></a>
-						<ul aria-labelledby="notifications" class="dropdown-menu">
+						<!-- <ul aria-labelledby="notifications" class="dropdown-menu">
 							<li><a rel="nofollow" href="#"
 								class="dropdown-item nav-link">
 									<div class="notification">
@@ -124,14 +129,14 @@
 							<li><a rel="nofollow" href="#"
 								class="dropdown-item all-notifications text-center"> <strong>view
 										all notifications </strong></a></li>
-						</ul></li>
+						</ul> --></li>
 					<!-- Messages                        -->
 					<li class="nav-item dropdown"><a id="messages"
 						class="nav-link logout" rel="nofollow" data-target="#" href="#"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
 							class="fa fa-envelope-o"></i><span class="noti-numb-bg"></span><span
 							class="badge">10</span></a>
-						<ul aria-labelledby="messages" class="dropdown-menu">
+						<!-- <ul aria-labelledby="messages" class="dropdown-menu">
 							<li><a rel="nofollow" href="#" class="dropdown-item d-flex">
 									<div class="msg-profile">
 										<img src="background/img/avatar-1.jpg" alt="..."
@@ -165,7 +170,7 @@
 							<li><a rel="nofollow" href="#"
 								class="dropdown-item all-notifications text-center"> <strong>Read
 										all messages </strong></a></li>
-						</ul></li>
+						</ul> --></li>
 					<li class="nav-item dropdown"><a id="profile"
 						class="nav-link logout" data-target="#" href="#"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
@@ -179,7 +184,7 @@
 											class="img-fluid rounded-circle">
 									</div>
 									<div class="msg-body">
-										<h3 class="h5">Steena Ben</h3>
+										<h3 class="h5">---- ${user.name}</h3>
 										<span>steenaben@Businessbox.com</span>
 									</div>
 							</a>
@@ -209,7 +214,7 @@
 									</div>
 							</a>
 								<hr></li>
-							<li><a rel="nofollow" href="profile.html"
+							<li><a rel="nofollow" href="/steels/logout"
 								class="dropdown-item">
 									<div class="notification">
 										<div class="notification-content">
@@ -356,8 +361,7 @@
 			<hr>
 			<!-- Sidebar Navidation Menus-->
 			<ul class="list-unstyled">
-				<li class="active"><a href="login"><i
-						class="icon-home"></i>Home</a></li>
+				<li class="active"><a href="login"><i class="icon-home"></i>Home</a></li>
 				<li><a href="#apps" aria-expanded="false"
 					data-toggle="collapse"> <i class="icon-interface-windows"></i>Apps
 				</a>

@@ -74,6 +74,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/background/img/**", "anon");
 		filterChainDefinitionMap.put("/background/js/**", "anon");
 		filterChainDefinitionMap.put("/background/myjs/**", "anon");
+		filterChainDefinitionMap.put("/background/layui/**", "anon");
 		filterChainDefinitionMap.put("/error/**", "anon");
 		filterChainDefinitionMap.put("/**", "authc");
 		// 登陆页面

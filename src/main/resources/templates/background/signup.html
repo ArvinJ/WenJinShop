@@ -22,6 +22,9 @@
 <link rel="stylesheet" href="background/css/animate.css">
 <link rel="stylesheet" href="background/css/signup_style.css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="background/layui/layui.js" type="text/javascript"></script>
+<script src="background/layui/layui.all.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 	function signup() {
 		var username = $("#name").val();
@@ -46,18 +49,38 @@
 				var temp=JSON.stringify(result);
 				var jsonObj = eval("("+temp+")");
 				if (jsonObj.res == "200") {
-					alert(jsonObj.msg);
+					layer.open({
+				        type: 1
+				        ,title: false //不显示标题栏
+				        ,closeBtn: false
+				        ,area: '300px;'
+				        ,shade: 0.8
+				        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+				        ,btn: ['快去登录', '知道了']
+				        ,btnAlign: 'c'
+				        ,moveType: 1 //拖拽模式，0或者1
+				        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+username+',注册成功了。</div>'
+				        ,success: function(layero){
+				          var btn = layero.find('.layui-layer-btn');
+				          btn.find('.layui-layer-btn0').attr({
+				            href: 'http://localhost:8283/steels/signin'
+				            ,target: '_self'
+				          });
+				        }
+				      });
+					//window.location.href="http://localhost:8283/steels/signin";
 					// 成功
 				} else if (jsonObj.res == "501"){
-					alert(jsonObj.msg);
+					layer.msg(jsonObj.msg);
 					// 用户名错误
 				}else if (jsonObj.res == "502"){
-					alert(jsonObj.msg);
+					layer.msg(jsonObj.msg);
 					// 密码错误
 				}
 			},
 			error : function(result) {
-				alert("失败..." + result);
+				console.log(result);
+				layer.msg("SignUp ERROR");
 			}
 		});
 

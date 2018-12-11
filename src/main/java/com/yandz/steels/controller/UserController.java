@@ -3,6 +3,8 @@ package com.yandz.steels.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -12,6 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,9 +50,9 @@ public class UserController {
 	/**
 	 * 登录
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/loginjson", method = RequestMethod.POST)
 	@ResponseBody
-	public Result login(@RequestBody User u) {
+	public Result loginJSON(@RequestBody User u) {
 
 		try {
 			u.setPass(MD5.md5(u.getName(), u.getPass()));
@@ -64,8 +67,10 @@ public class UserController {
 		// 进行验证，这里可以捕获异常，然后返回对应信息
 		try {
 			subject.login(usernamePasswordToken);
+			User user = userService.findByName(u.getName());
 			result.setRes("200");
 			result.setMsg("登录成功");
+			result.setData(user);
 		} catch (UnknownAccountException e) {
 			result.setRes("501");
 			result.setMsg("用户名错误");
@@ -77,8 +82,39 @@ public class UserController {
 			result.setMsg("登录失败");
 		}
 
-
 		return result;
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(HttpServletRequest request, Model model) {
+		String name = request.getParameter("username");
+	 	String pass = request.getParameter("password");
+		User u = new User();
+		u.setName(name);u.setPass(pass);
+	 	System.err.println(u.toString());
+		try {
+			u.setPass(MD5.md5(u.getName(), u.getPass()));
+		} catch (Exception e1) {
+			System.err.println("密码加密重组错误！");
+			e1.printStackTrace();
+		}
+		// 添加用户认证信息
+		Subject subject = SecurityUtils.getSubject();
+		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(u.getName().toString(),
+				u.getPass().toString());
+		// 进行验证，这里可以捕获异常，然后返回对应信息
+		try {
+			subject.login(usernamePasswordToken);
+			model.addAttribute("user", u);
+			return "redirect:/";
+		} catch (UnknownAccountException e) {
+			return "redirect:/signin?state=501";
+		} catch (IncorrectCredentialsException e) {
+			return "redirect:/signin?state=502";
+		} catch (AuthenticationException e) {
+			return "redirect:/steels/signin?state=500";
+		}
+
 	}
 
 	/**

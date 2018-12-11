@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,9 +13,10 @@
 <!-- <script src="background/myjs/jquery-3.3.1.min.js"/> -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- <script src="background/myjs/signin.js"></script> -->
+<script src="background/layui/layui.js" type="text/javascript"></script>
+<script src="background/layui/layui.all.js" type="text/javascript"></script>
 
-
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	function signin() {
 		var username = $("#username").val();
 		var password = $("#password").val();
@@ -30,34 +31,32 @@
 				"name" : username,
 				"pass" : password
 			}),
-			beforeSend : function() {
-				//$("body").append('<div id="pload" style="position:fixed;top:30%;z-index:1200;background:url(background/img/loading.gif) top center no-repeat;width:100%;height:140px;margin:auto auto;"></div>');
-			},
-			complete : function() {
-				//$("#pload").remove();
-			},
+			
 			success : function(result) {
-				console.log("res:",result.res);
-				var temp=JSON.stringify(result);
+				 console.log("res:",result.res);
+				 var temp=JSON.stringify(result);
 				var jsonObj = eval("("+temp+")");
 				if (jsonObj.res == "200") {
-					alert(jsonObj.msg);
+					window.location.href="http://localhost:8283/steels/";
 					// 成功
 				} else if (jsonObj.res == "501"){
-					alert(jsonObj.msg);
+					//alert(jsonObj.msg);
+					layer.msg(jsonObj.msg);
 					// 用户名错误
 				}else if (jsonObj.res == "502"){
-					alert(jsonObj.msg);
+					layer.msg(jsonObj.msg);
 					// 密码错误
-				}
+				} 
 			},
-			error : function(result) {
-				alert("失败..." + result);
-			}
+			error : function(XMLHttpRequest, textStatus, errorThrown) { 
+				　　             alert(XMLHttpRequest.status); 
+				　　                 alert(XMLHttpRequest.readyState); 
+				　　                alert(textStatus);        
+				 　　}     
 		});
 
 	}
-</script>
+</script> -->
 </head>
 <body class="style-3">
 
@@ -67,16 +66,17 @@
 			<div class="col-md-4 col-md-push-8">
 
 				<form class="fh5co-form animate-box"
-					data-animate-effect="fadeInRight">
+					data-animate-effect="fadeInRight" method="post" enctype="application/x-www-form-urlencoded"  action="/steels/user/login">
 					<h2>Sign In</h2>
+					<p th:text="${state}"/>
 					<div class="form-group">
 						<label for="username" class="sr-only">Username</label> <input
-							type="text" class="form-control" id="username"
+							type="text" class="form-control" id="username" name="username"
 							placeholder="Username" autocomplete="off">
 					</div>
 					<div class="form-group">
 						<label for="password" class="sr-only">Password</label> <input
-							type="password" class="form-control" id="password"
+							type="password" class="form-control" id="password" name="password"
 							placeholder="Password" autocomplete="off">
 					</div>
 					<div class="form-group">
@@ -91,7 +91,7 @@
 					</div>
 					<div class="form-group">
 
-						<button type="button" onclick="signin();" class="btn btn-primary">Sign
+						<button type="submit"  class="btn btn-primary">Sign
 							In</button>
 					</div>
 				</form>

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,12 +87,12 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, Model model) {
+	public String login(HttpServletRequest request) {
 		String name = request.getParameter("username");
 	 	String pass = request.getParameter("password");
 		User u = new User();
 		u.setName(name);u.setPass(pass);
-	 	System.err.println(u.toString());
+	 
 		try {
 			u.setPass(MD5.md5(u.getName(), u.getPass()));
 		} catch (Exception e1) {
@@ -105,7 +106,8 @@ public class UserController {
 		// 进行验证，这里可以捕获异常，然后返回对应信息
 		try {
 			subject.login(usernamePasswordToken);
-			model.addAttribute("user", u);
+			User user = userService.findByName(u.getName());
+			request.getSession().setAttribute("user",user);
 			return "redirect:/";
 		} catch (UnknownAccountException e) {
 			return "redirect:/signin?state=501";

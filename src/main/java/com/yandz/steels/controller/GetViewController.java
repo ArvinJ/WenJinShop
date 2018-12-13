@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.yandz.steels.entity.Module;
@@ -20,19 +21,19 @@ public class GetViewController {
 	@RequestMapping("/signin")
 	public String signin(HttpServletRequest request, Model model) {
 		// 登录界面
-		int state=200;
+		int state = 200;
 		try {
 			state = Integer.parseInt(request.getParameter("state"));
 		} catch (NumberFormatException e) {
 		}
 		if (state == 501) {
-			 model.addAttribute("state","用户名错误");
+			model.addAttribute("state", "用户名错误");
 		} else if (state == 502) {
-			 model.addAttribute("state","密码错误");
-		} else if(state==500) {
-			model.addAttribute("state","登录名或密码不正确");
-		}else {
-			model.addAttribute("state","请输入用户名和密码");
+			model.addAttribute("state", "密码错误");
+		} else if (state == 500) {
+			model.addAttribute("state", "登录名或密码不正确");
+		} else {
+			model.addAttribute("state", "请输入用户名和密码");
 		}
 		return "background/signin";
 	}
@@ -50,8 +51,13 @@ public class GetViewController {
 	}
 
 	@RequestMapping("/test")
-	public String test() {
-		// 注册
+	public String test(ModelMap map) {
+		// 测试
+
+		 // 加入一个属性，用来在模板中读取
+        map.addAttribute("host", "Spring test");
+        // return模板文件的名称，对应src/main/resources/templates/background/test.html
 		return "background/test";
 	}
+
 }
